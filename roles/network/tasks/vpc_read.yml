@@ -1,0 +1,17 @@
+---
+- name: gather vpc information
+  ec2_vpc_net_info:
+    region: "{{ region }}"
+    aws_access_key: "{{ec2_access_key}}"
+    aws_secret_key: "{{ec2_secret_key}}"
+    filters:
+      "tag:Name": "{{ vpc_name }}"
+      state: available
+  register: vpc_output
+
+- name: show vpc info
+  set_fact:
+    matched_vpc: "{{ item }}"
+  with_items: "{{ vpc_output.vpcs }}"
+  when:
+    - item.cidr_block == vpc_cidr

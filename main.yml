@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  vars_files: vars.yml
+  tasks:
+    - name: start actions
+      debug:
+        msg: "Start actions for aws"
+    - name: start network actions
+      include_role:
+        name: network

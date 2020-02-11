@@ -1,0 +1,11 @@
+- name: try to create ec2
+  ec2:
+    key_name: 
+    instance_type: t2.micro
+    image:
+    wait: yes
+    group:
+    count: 1
+    vpc_subnet_id:
+    assign_public_ip: yes
+    region: "{{ region }}"

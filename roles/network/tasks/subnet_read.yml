@@ -1,0 +1,25 @@
+---
+- name: call Gather VPC info (if there is any)
+  include: vpc_read.yml
+
+- name: gather subnet info
+  ec2_vpc_subnet_info:
+    region: "{{ region }}"
+    aws_access_key: "{{ec2_access_key}}"
+    aws_secret_key: "{{ec2_secret_key}}"
+    filters:
+      vpc-id: "{{ matched_vpc.id }}"
+      state: available
+      "tag:Access": "{{ tag_type_access }}"
+      #"tag:Name": "{{ subnet_name }}"
+  register: subnet_output
+
+- name: chose most available
+  set_fact:
+    matched_subnet: "{{ subnet_output.subnets | sort('available_ip_address_count'|int) }}"
+
+- name: show subnet info
+  debug:
+    msg: "{{ subnet_output.subnets | sort('available_ip_address_count'|int) }}"
+    #msg: "{{ item }}"
+  #with_items: "{{ subnet_output.subnets }}"

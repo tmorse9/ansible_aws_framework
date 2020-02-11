@@ -1,0 +1,8 @@
+---
+- name: Gather VPC info (if there is any)
+  include: vpc_read.yml
+  when: service_flag == "vpc"
+
+- name: Gather Subnet info (if there is any)
+  include: subnet_read.yml
+  when: service_flag == "subnet"
